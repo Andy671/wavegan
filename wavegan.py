@@ -191,7 +191,18 @@ def WaveGANDiscriminator(
   # [16384, 1] -> [4096, 64]
   output = x
   with tf.variable_scope('downconv_0'):
+    # TODO: PROBLEM HERE
+    print('(Andy) before output:')
+    print(output)
+    print('(Andy) before dim:')
+    print(dim)
+    print('(Andy) before kernel_len:')
+    print(kernel_len)
+    print('(Andy) tf version:')
+    print(tf.__version__)
     output = tf.layers.conv1d(output, dim, kernel_len, 4, padding='SAME')
+    print('(Andy) after output:')
+    print(output)
   output = lrelu(output)
   output = phaseshuffle(output)
 
