@@ -47,7 +47,7 @@ def train(fps, args):
     G_z = WaveGANGenerator(z, train=True, **args.wavegan_g_kwargs)
     if args.wavegan_genr_pp:
       with tf.variable_scope('pp_filt'):
-        G_z = tf.layers.conv1d(G_z, 1, args.wavegan_genr_pp_len, use_bias=False, padding='same')
+        G_z = tf.layers.conv1d(G_z, args.data_num_channels, args.wavegan_genr_pp_len, use_bias=False, padding='same')
   G_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope='G')
 
   # Print G summary
@@ -90,6 +90,7 @@ def train(fps, args):
 
   # Make fake discriminator
   with tf.name_scope('D_G_z'), tf.variable_scope('D', reuse=True):
+    ## TODO: PROBLEM HERE
     D_G_z = WaveGANDiscriminator(G_z, **args.wavegan_d_kwargs)
 
   # Create loss
@@ -253,7 +254,7 @@ def infer(args):
     G_z = WaveGANGenerator(z, train=False, **args.wavegan_g_kwargs)
     if args.wavegan_genr_pp:
       with tf.variable_scope('pp_filt'):
-        G_z = tf.layers.conv1d(G_z, 1, args.wavegan_genr_pp_len, use_bias=False, padding='same')
+        G_z = tf.layers.conv1d(G_z, args.data_num_channels, args.wavegan_genr_pp_len, use_bias=False, padding='same')
   G_z = tf.identity(G_z, name='G_z')
 
   # Flatten batch
